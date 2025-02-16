@@ -1,20 +1,15 @@
-let username = document.getElementById("name");
-let age = document.getElementById("age");
-let color = document.getElementById("color");
-let go = document.getElementById("go");
+window.addEventListener("load", () => {
+  go.addEventListener("click", () => {
+    const username = document.getElementById("name");
+    const age = document.getElementById("age");
+    const color = document.getElementById("color");
+    console.log(username.value, age.value, color.value);
+    if( username.value ) && (age.value) && (color.value)
+    window.location.href = "game.html";
+  });
+});
 
-username.addEventListener("click",function() {
-    console.log(username);
-})
 
-age.addEventListener("click",function() {
-    console.log(age);
-})
 
-color.addEventListener("click",function() {
-    console.log(color);
-})
 
-go.addEventListener("click",function() {
-    console.log(go);
-})
+
