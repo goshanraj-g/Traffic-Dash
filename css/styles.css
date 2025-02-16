@@ -1,4 +1,79 @@
-*{
-    color: blue;
-    
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  background: #0f0f0f;
+}
+
+.intro-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 450px;
+  padding: 40px;
+  background: #1a1a1a; 
+  border-radius: 12px;
+  border: 1px solid #c11d1d55;
+  box-shadow: 0 0 20px rgba(193, 29, 29, 0.2);
+}
+
+.intro-box h1 {
+  font-size: 2.5rem;
+  color: #fff;
+  margin: 0 0 30px 0;
+  letter-spacing: 2px;
+  text-align: center; 
+}
+
+.input-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+}
+
+.intro-box input {
+  width: 90%;
+  padding: 12px;
+  background: #2a2a2a;
+  border: 1px solid #c11d1d;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 1rem;
+  text-align: center; 
+}
+
+.intro-box input:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(193, 29, 29, 0.3);
+}
+
+.intro-box button {
+  width: 60%;
+  padding: 12px;
+  background: #c11d1d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-top: 30px;
+  transition: transform 0.2s ease;
+  text-align: center; 
+}
+
+
+.intro-box button:hover {
+  transform: scale(1.06);
+  background: #e02e2e;
 }
