@@ -12,21 +12,20 @@
 
 <body>
     <div class="intro-box">
-        <h1>
-            🚦 TRAFFIC DASH 🚦
-        </h1>
+        <h1>🚦 TRAFFIC DASH 🚦</h1>
         <div class="input-group">
             <input type="text" name="Name" placeholder="Name" id="name">
-            <input type="Number" name="Age" placeholder="Age" id="age" pattern="[0-9]" required>
-            <input type="text" name="Favorite Color" placeholder="Favorite Color" id="color">
+            <input type="number" name="Age" placeholder="Age" id="age" min="0" step="1" required>
+
+            <div class="color-picker">
+                <p>Select Favorite Color:</p>
+                <div class="color-input-wrapper">
+                    <input type="color" name="Favorite Color" id="color" value="#FFFFFF">
+                </div>
+            </div>
         </div>
-
         <button id="go">GO!</button>
-
-
     </div>
-
-
 </body>
 
 </html>
