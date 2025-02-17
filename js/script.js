@@ -7,6 +7,13 @@ window.addEventListener("load", () => {
   const car = document.getElementById("car");
   let carX = 0;
   let carY = 0;
+  let velocityX = 0;
+  let velocityY = 0;
+  const acceleration = 0.2;
+  const maxSpeed = 10;
+  const friction = 0.95;
+  const boundary = 300;
+
   const speed = 3;
 
   document.querySelector(".game-page").style.display = "none";
@@ -26,29 +33,92 @@ window.addEventListener("load", () => {
 
   const keys = {};
 
-  document.addEventListener("keydown", (event) =>{
+  document.addEventListener("keydown", (event) => {
     keys[event.key] = true;
   });
 
   document.addEventListener("keyup", (event) => {
     keys[event.key] = false;
-  })
+  });
 
   function update() {
     if (keys["ArrowUp"] || keys["w"] || keys["W"]) {
-      carY -= speed;
+      if (carY > -boundary) {
+        velocityY -= acceleration;
+      }
     }
 
     if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
-      carX -= speed;
+      if (carX > -boundary) {
+        velocityX -= acceleration;
+      }
     }
 
     if (keys["ArrowDown"] || keys["s"] || keys["S"]) {
-      carY += speed;
+      if (carY < boundary) {
+        velocityY += acceleration;
+      }
     }
 
     if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
-      carX += speed;
+      if (carX < boundary) {
+        velocityX += acceleration;
+      }
+    }
+
+    velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
+    velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
+
+    if (
+      !(
+        keys["ArrowUp"] ||
+        keys["w"] ||
+        keys["W"] ||
+        keys["ArrowDown"] ||
+        keys["s"] ||
+        keys["S"]
+      )
+    ) {
+      velocityY *= friction;
+    }
+    if (
+      !(
+        keys["ArrowLeft"] ||
+        keys["a"] ||
+        keys["A"] ||
+        keys["ArrowRight"] ||
+        keys["d"] ||
+        keys["D"]
+      )
+    ) {
+      velocityX *= friction;
+    }
+
+    carX += velocityX;
+    carY += velocityY;
+
+    const container = document.querySelector(".game-page");
+    const containerRect = container.getBoundingClientRect();
+    const carRect = car.getBoundingClientRect();
+
+    if (carRect.left < containerRect.left) {
+      carX += containerRect.left - carRect.left;
+      velocityX = 0;
+    }
+
+    if (carRect.right > containerRect.right) {
+      carX += containerRect.right - carRect.right;
+      velocityX = 0;
+    }
+
+    if (carRect.up < containerRect.up) {
+      carY += containerRect.up - carRect.up;
+      velocityY = 0;
+    }
+
+    if (carRect.down < containerRect.down) {
+      carY += containerRect.down - carRect.down;
+      velocityY = 0;
     }
 
     car.style.transform = `translate(${carX}px, ${carY}px)`;
@@ -56,5 +126,4 @@ window.addEventListener("load", () => {
     requestAnimationFrame(update);
   }
   requestAnimationFrame(update);
-
-  });;
+});
