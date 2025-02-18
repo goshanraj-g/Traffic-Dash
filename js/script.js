@@ -19,13 +19,11 @@ window.addEventListener("load", () => {
     const container = document.querySelector(".game-page");
     const containerRect = container.getBoundingClientRect();
     const carRect = car.getBoundingClientRect();
-    const roadRect = document.getElementById("road").getBoundingClientRect();
+    const roadRect = document.getElementById("road-container").getBoundingClientRect();
 
-    // Position car in the middle of the road
-    carX = (containerRect.width - carRect.width) / 2;
-    carY = containerRect.height - carRect.height - 100; // 100px from bottom for better visibility
+    carX = containerRect.width - (roadRect.width) / 2;
+    carY = containerRect.height - carRect.height; 
 
-    // Reset transform before initializing
     car.style.transform = `translate(${carX}px, ${carY}px)`;
   }
 
@@ -37,8 +35,7 @@ window.addEventListener("load", () => {
       document.querySelector(".game-page").style.display = "flex";
       body.style.backgroundImage = "none";
 
-      // Initialize car position after game page is displayed
-      setTimeout(initializeCarPosition, 10); // Small delay to ensure elements are rendered
+      setTimeout(initializeCarPosition, 10); 
       car.focus();
     }
   });
@@ -70,37 +67,12 @@ window.addEventListener("load", () => {
     velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
     velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
 
-<<<<<<< HEAD
-    if (
-      !(
-        keys["ArrowUp"] ||
-        keys["w"] ||
-        keys["W"] ||
-        keys["ArrowDown"] ||
-        keys["s"] ||
-        keys["S"]
-      )
-    ) {
-      velocityY *= friction;
-    }
-    if (
-      !(
-        keys["ArrowLeft"] ||
-        keys["a"] ||
-        keys["A"] ||
-        keys["ArrowRight"] ||
-        keys["d"] ||
-        keys["D"]
-      )
-    ) {
-=======
     if (!(keys["ArrowUp"] || keys["w"] || keys["W"] ||
       keys["ArrowDown"] || keys["s"] || keys["S"])) {
       velocityY *= friction;
     }
     if (!(keys["ArrowLeft"] || keys["a"] || keys["A"] ||
       keys["ArrowRight"] || keys["d"] || keys["D"])) {
->>>>>>> b3399a9f8fccc359aab19c8af9adcdbbc8a2f8c3
       velocityX *= friction;
     }
 
@@ -110,20 +82,13 @@ window.addEventListener("load", () => {
     const container = document.querySelector(".game-page");
     const containerRect = container.getBoundingClientRect();
     const carRect = car.getBoundingClientRect();
-<<<<<<< HEAD
-
-    if (carRect.left < containerRect.left) {
-      carX += containerRect.left - carRect.left;
-=======
     const roadRect = document.getElementById("road").getBoundingClientRect();
 
-    // Adjust the boundaries based on the road width
-    const leftBoundary = containerRect.left + (containerRect.width - roadRect.width) / 2;
-    const rightBoundary = leftBoundary + roadRect.width;
+    const leftBoundary = containerRect.left + (containerRect.width - (roadRect.width-100))/2;
+    const rightBoundary = leftBoundary + (roadRect.width-100);
 
     if (carRect.left < leftBoundary) {
       carX += leftBoundary - carRect.left;
->>>>>>> b3399a9f8fccc359aab19c8af9adcdbbc8a2f8c3
       velocityX = 0;
     }
     if (carRect.right > rightBoundary) {
