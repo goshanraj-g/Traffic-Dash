@@ -174,7 +174,6 @@ body {
 }
 
 .car{
-  width: 15%;
   height: 15%;
-  object-fit: contain;
+  position: relative;
 }

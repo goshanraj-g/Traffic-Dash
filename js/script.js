@@ -10,9 +10,8 @@ window.addEventListener("load", () => {
   let velocityX = 0;
   let velocityY = 0;
   const acceleration = 0.2;
-  const maxSpeed = 10;
+  const maxSpeed = 30;
   const friction = 0.95;
-  const boundary = 300;
 
   const speed = 3;
 
@@ -43,86 +42,56 @@ window.addEventListener("load", () => {
 
   function update() {
     if (keys["ArrowUp"] || keys["w"] || keys["W"]) {
-      if (carY > -boundary) {
-        velocityY -= acceleration;
-      }
+      velocityY -= acceleration;
     }
-
     if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
-      if (carX > -boundary) {
-        velocityX -= acceleration;
-      }
+      velocityX -= acceleration;
     }
-
     if (keys["ArrowDown"] || keys["s"] || keys["S"]) {
-      if (carY < boundary) {
-        velocityY += acceleration;
-      }
+      velocityY += acceleration;
     }
-
     if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
-      if (carX < boundary) {
-        velocityX += acceleration;
-      }
+      velocityX += acceleration;
     }
-
+  
     velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
     velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
-
-    if (
-      !(
-        keys["ArrowUp"] ||
-        keys["w"] ||
-        keys["W"] ||
-        keys["ArrowDown"] ||
-        keys["s"] ||
-        keys["S"]
-      )
-    ) {
+  
+    if (!(keys["ArrowUp"] || keys["w"] || keys["W"] || 
+          keys["ArrowDown"] || keys["s"] || keys["S"])) {
       velocityY *= friction;
     }
-    if (
-      !(
-        keys["ArrowLeft"] ||
-        keys["a"] ||
-        keys["A"] ||
-        keys["ArrowRight"] ||
-        keys["d"] ||
-        keys["D"]
-      )
-    ) {
+    if (!(keys["ArrowLeft"] || keys["a"] || keys["A"] || 
+          keys["ArrowRight"] || keys["d"] || keys["D"])) {
       velocityX *= friction;
     }
-
+  
     carX += velocityX;
     carY += velocityY;
-
+  
     const container = document.querySelector(".game-page");
     const containerRect = container.getBoundingClientRect();
     const carRect = car.getBoundingClientRect();
-
+  
     if (carRect.left < containerRect.left) {
       carX += containerRect.left - carRect.left;
       velocityX = 0;
     }
-
     if (carRect.right > containerRect.right) {
       carX += containerRect.right - carRect.right;
       velocityX = 0;
     }
-
-    if (carRect.up < containerRect.up) {
-      carY += containerRect.up - carRect.up;
+    if (carRect.top < containerRect.top) {
+      carY += containerRect.top - carRect.top;
       velocityY = 0;
     }
-
-    if (carRect.down < containerRect.down) {
-      carY += containerRect.down - carRect.down;
+    if (carRect.bottom > containerRect.bottom) {
+      carY += containerRect.bottom - carRect.bottom;
       velocityY = 0;
     }
-
+  
     car.style.transform = `translate(${carX}px, ${carY}px)`;
-
+  
     requestAnimationFrame(update);
   }
   requestAnimationFrame(update);
