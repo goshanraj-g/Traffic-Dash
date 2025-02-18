@@ -53,26 +53,42 @@ window.addEventListener("load", () => {
     if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
       velocityX += acceleration;
     }
-  
+
     velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
     velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
-  
-    if (!(keys["ArrowUp"] || keys["w"] || keys["W"] || 
-          keys["ArrowDown"] || keys["s"] || keys["S"])) {
+
+    if (
+      !(
+        keys["ArrowUp"] ||
+        keys["w"] ||
+        keys["W"] ||
+        keys["ArrowDown"] ||
+        keys["s"] ||
+        keys["S"]
+      )
+    ) {
       velocityY *= friction;
     }
-    if (!(keys["ArrowLeft"] || keys["a"] || keys["A"] || 
-          keys["ArrowRight"] || keys["d"] || keys["D"])) {
+    if (
+      !(
+        keys["ArrowLeft"] ||
+        keys["a"] ||
+        keys["A"] ||
+        keys["ArrowRight"] ||
+        keys["d"] ||
+        keys["D"]
+      )
+    ) {
       velocityX *= friction;
     }
-  
+
     carX += velocityX;
     carY += velocityY;
-  
+
     const container = document.querySelector(".game-page");
     const containerRect = container.getBoundingClientRect();
     const carRect = car.getBoundingClientRect();
-  
+
     if (carRect.left < containerRect.left) {
       carX += containerRect.left - carRect.left;
       velocityX = 0;
@@ -89,9 +105,9 @@ window.addEventListener("load", () => {
       carY += containerRect.bottom - carRect.bottom;
       velocityY = 0;
     }
-  
+
     car.style.transform = `translate(${carX}px, ${carY}px)`;
-  
+
     requestAnimationFrame(update);
   }
   requestAnimationFrame(update);
