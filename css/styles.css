@@ -326,6 +326,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
+  overflow: hidden;
 }
 
 .road {
@@ -333,6 +334,18 @@ body {
   align-items: flex-end;
   justify-content: center;
   position: relative;
+  animation: scroll-img 15s linear infinite;
+}
+
+
+@keyframes scroll-img {
+  0% {
+    transform: translateY(0px);
+  }
+
+  100% {
+    transform: translateY(4500px);
+  }
 }
 
 .road-container {
@@ -342,6 +355,7 @@ body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  overflow: hidden;
 }
 
 .car {
