@@ -1,17 +1,179 @@
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  font-family: "Poppins", sans-serif;
-  background-image: url("../images/background-image.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+    background-image: url("../images/background-image.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  
+  .intro-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 450px;
+    padding: 40px;
+    background: #1a1a1a8b; 
+    border-radius: 12px;
+    border: 1px solid #c11d1d55;
+    box-shadow: 0 0 20px rgba(193, 29, 29, 0.2);
+  }
+  
+  .intro-box h1 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin: 0 0 30px 0;
+    letter-spacing: 2px;
+    text-align: center; 
+  }
+  
+  .input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+  }
+  
+  .intro-box input {
+    width: 90%;
+    padding: 12px;
+    background: #2a2a2a;
+    border: 1px solid #c11d1d;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1rem;
+    text-align: center; 
+  }
+  
+  .intro-box input:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(193, 29, 29, 0.3);
+  }
+  
+  .intro-box input[type="number"]::-webkit-outer-spin-button,
+  .intro-box input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  
+  .intro-box input[type="number"] {
+    width: 90%;
+    padding: 12px;
+    background: #2a2a2a;
+    border: 1px solid #c11d1d;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .intro-box input[type="number"]:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(193, 29, 29, 0.3);
+  }
+  
+  .intro-box input[type="color"] {
+    width: 100%;
+    height: 45px;
+    padding: 10px;
+    background: #2a2a2a;
+    border: 1px solid #c11d1d;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .intro-box input[type="color"]::-webkit-color-swatch {
+    border: 1px solid #c11d1d55;
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(193, 29, 29, 0.2);
+  }
+  
+  .intro-box input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  
+  .intro-box input[type="color"]::-moz-color-swatch {
+    border: 1px solid #c11d1d55;
+    border-radius: 4px;
+  }
+  
+  .intro-box input[type="color"]:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 12px rgba(193, 29, 29, 0.3);
+  }
+  
+  .intro-box input[type="color"] {
+    width: 100%;
+    padding: 10px;
+    background: #2a2a2a;
+    border: 1px solid #c11d1d;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1rem;
+    appearance: none;
+  }
+  
+  .color-picker p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 5px;
+    margin-top: -8px;  
+  }
+  
+  .intro-box button {
+    width: 60%;
+    padding: 12px;
+    background: #c11d1d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-top: 30px;
+    transition: transform 0.2s ease;
+    text-align: center; 
+    cursor: pointer;
+  }
+  
+  
+  .intro-box button:hover {
+    transform: scale(1.06);
+    background: #e02e2e;
+  }
+  
+  /* game */
+  
+  .game-page {
+    display: none; 
+    align-items: flex-end;
+    justify-content:center;
+    width: 100%;
+    height: 100vh;
+    background-color: #ffffff;
+    position: fixed;
+    top: 0;  
+    left: 0;
+  }
 
+<<<<<<< HEAD
 .intro-box {
   display: flex;
   flex-direction: column;
@@ -174,3 +336,29 @@ body {
   height: 15%;
   position: relative;
 }
+=======
+  .road{ 
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+  }
+
+  .road-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  
+  .car{
+    height: 18%;
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+>>>>>>> b3399a9f8fccc359aab19c8af9adcdbbc8a2f8c3
