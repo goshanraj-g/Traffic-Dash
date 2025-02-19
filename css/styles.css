@@ -344,7 +344,7 @@ body {
   }
 
   100% {
-    transform: translateY(4500px);
+    transform: translateY(4000px);
   }
 }
 
@@ -365,4 +365,18 @@ body {
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
+}
+
+@media screen and (max-width: 580px) {
+  body{ 
+    background-image: url("../images/mobile-background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .intro-box{
+    margin: 50px;
+  }
+
+
 }
