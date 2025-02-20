@@ -13,6 +13,17 @@ window.addEventListener("load", () => {
   const maxSpeed = 30;
   const friction = 0.9;
 
+  // Game state variables
+  let score = 0;
+  let collisions = 0;
+  let currentRound = 1;
+  let npcCarSpeed = 3;
+  let spawnDelay = 1500;
+  let maxNPCCount = 4;
+  let spawnInterval;
+  let scoreInterval;
+  const npcCars = [];
+
   document.querySelector(".game-page").style.display = "none";
 
   function getLanePositions() {
@@ -22,15 +33,12 @@ window.addEventListener("load", () => {
     const roadRect = road.getBoundingClientRect();
     const roadLeft = (containerRect.width - roadRect.width) / 2;
     const shift = roadRect.width * 0.05;
-
     const lane1 = roadLeft + roadRect.width * (1 / 6);
     const lane2 = roadLeft + roadRect.width * (1 / 2) - shift;
     const lane3 = roadLeft + roadRect.width * (5 / 6) - shift * 3;
-
     return [lane1, lane2, lane3];
   }
 
-  // Initialize player's car position to the center lane.
   function initializeCarPosition() {
     const container = document.querySelector(".game-page");
     const containerRect = container.getBoundingClientRect();
@@ -41,175 +49,228 @@ window.addEventListener("load", () => {
     car.style.transform = `translate(${carX}px, ${carY}px)`;
   }
 
-  go.addEventListener("click", () => {
-    if (username.value === "" || age.value === "" || color.value === "") {
-      alert("Please make sure you have entered appropriate inputs");
-    } else {
-      document.querySelector(".intro-box").style.display = "none";
-      document.querySelector(".game-page").style.display = "flex";
-      body.style.backgroundImage = "none";
-
-      setTimeout(() => {
-        createTrafficNPCs();
-        car.focus();
-      }, 10);
-
-      setTimeout(initializeCarPosition, 10);
+  function updateScoreBoard() {
+    const scoreBoard = document.getElementById("score-board");
+    if (scoreBoard) {
+      scoreBoard.innerText = `Score: ${score} | Round: ${getRoundName()} | Hits: ${collisions}/10`;
     }
-  });
-
-  const keys = {};
-  document.addEventListener("keydown", (event) => {
-    keys[event.key] = true;
-  });
-  document.addEventListener("keyup", (event) => {
-    keys[event.key] = false;
-  });
-
-  function update() {
-    if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
-      velocityX -= acceleration;
-    }
-    if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
-      velocityX += acceleration;
-    }
-
-    velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
-    velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
-
-    if (
-      !(
-        keys["ArrowLeft"] ||
-        keys["a"] ||
-        keys["A"] ||
-        keys["ArrowRight"] ||
-        keys["d"] ||
-        keys["D"]
-      )
-    ) {
-      velocityX *= friction;
-    }
-
-    carX += velocityX;
-
-    const container = document.querySelector(".game-page");
-    const containerRect = container.getBoundingClientRect();
-    const carRect = car.getBoundingClientRect();
-    const roadRect = document.getElementById("road").getBoundingClientRect();
-    const roadLeft = (containerRect.width - roadRect.width) / 2;
-    const leftBoundary = roadLeft + roadLeft*0.1;
-    const rightBoundary = roadLeft + roadRect.width - roadLeft*0.1;
-
-    if (carRect.left < leftBoundary) {
-      carX += leftBoundary - carRect.left;
-      velocityX = 0;
-    }
-    if (carRect.right > rightBoundary) {
-      carX += rightBoundary - carRect.right;
-      velocityX = 0;
-    }
-    if (carRect.top < containerRect.top) {
-      carY += containerRect.top - carRect.top;
-      velocityY = 0;
-    }
-    if (carRect.bottom > containerRect.bottom) {
-      carY += containerRect.bottom - carRect.bottom;
-      velocityY = 0;
-    }
-
-    car.style.transform = `translate(${carX}px, ${carY}px)`;
-    requestAnimationFrame(update);
   }
-  requestAnimationFrame(update);
 
-  const npcCars = [];
+  function startScoreUpdate() {
+    scoreInterval = setInterval(() => {
+      score++;
+      checkRoundTransition();
+      updateScoreBoard();
+    }, 1000);
+  }
 
-  function createTrafficNPCs() {
-    const gameContainer = document.querySelector(".game-page");
+  function updateBackgroundSpeed() {
+    const road = document.getElementById("road");
+    if (currentRound === 1) {
+      road.style.animationDuration = "15s";
+    } else if (currentRound === 2) {
+      road.style.animationDuration = "10s";
+    } else if (currentRound === 3) {
+      road.style.animationDuration = "5s";
+    }
+  }
+
+  function checkRoundTransition() {
+    if (currentRound === 1 && score >= 10) {
+      currentRound = 2;
+      npcCarSpeed = 5;
+      spawnDelay = 1000;
+      maxNPCCount = 5;
+      car.src = "images/bike.png";
+      car.style.height = "15%";
+      resetSpawnInterval();
+      updateBackgroundSpeed();
+    } else if (currentRound === 2 && score >= 40) {
+      currentRound = 3;
+      npcCarSpeed = 7;
+      spawnDelay = 800;
+      maxNPCCount = 6;
+      resetSpawnInterval();
+      updateBackgroundSpeed();
+    }
+  }
+
+  function getRoundName() {
+    if (currentRound === 1) return "Easy";
+    if (currentRound === 2) return "Medium";
+    if (currentRound === 3) return "Hard";
+    return "";
+  }
+
+  function gameOver() {
+    clearInterval(spawnInterval);
+    clearInterval(scoreInterval);
+    const gameOverScreen = document.getElementById("game-over-screen");
+    const finalScoreEl = document.getElementById("final-score");
+    finalScoreEl.innerText = `Final Score: ${score}`;
+    gameOverScreen.style.display = "flex";
+  }
+
+  function restartGame() {
+    window.location.reload();
+  }
+
+  function startGame() {
+    document.getElementById("intro-box").style.display = "none";
+    document.getElementById("game-over-screen").style.display = "none";
+    document.querySelector(".game-page").style.display = "flex";
+    body.style.backgroundImage = "none";
+
+    const scoreBoard = document.getElementById("score-board");
+    scoreBoard.style.color = color.value;
+    updateScoreBoard();
+
+    score = 0;
+    collisions = 0;
+    currentRound = 1;
+    npcCarSpeed = 3;
+    spawnDelay = 1500;
+    maxNPCCount = 4;
+    car.src = "images/car.png";
+
+    startScoreUpdate();
+
+    npcCars.length = 0;
     const roadContainer = document.getElementById("road-container");
-    const carImages = [
-      "./images/traffic1.png",
-      "./images/traffic2.png",
-      "./images/traffic3.png",
-      "./images/traffic4.png",
-    ];
-    const numberOfCars = 4;
-    const minSpeed = 2;
-    const maxSpeed = 6;
+    document.querySelectorAll(".npcCar").forEach((el) => el.remove());
+
+    resetSpawnInterval();
+    updateBackgroundSpeed();
+
+    car.focus();
+    setTimeout(initializeCarPosition, 10);
+  }
+
+  function createNPCCar() {
+    const roadContainer = document.getElementById("road-container");
     const lanes = getLanePositions();
-    for (let i = 0; i < numberOfCars; i++) {
-      createNPCCar();
+    const carImages = [
+      "images/traffic1.png",
+      "images/traffic2.png",
+      "images/traffic3.png",
+      "images/traffic4.png",
+    ];
+
+    const npcCar = document.createElement("img");
+    const carModel = carImages[Math.floor(Math.random() * carImages.length)];
+    npcCar.src = carModel;
+    npcCar.classList.add("npcCar");
+    npcCar.style.width = "80px";
+    npcCar.style.position = "absolute";
+    npcCar.style.zIndex = "5";
+
+    const safePosition = findSafeSpawnPosition(lanes);
+    if (!safePosition) {
+      return null;
     }
 
-    function createNPCCar() {
-      const npcCar = document.createElement("img");
-      const carModel = carImages[Math.floor(Math.random() * carImages.length)];
-      npcCar.src = carModel;
-      npcCar.classList.add("npcCar");
-      roadContainer.appendChild(npcCar);
+    roadContainer.appendChild(npcCar);
 
-      const initialY = -200 - Math.random() * 500;
-      const carSpeed = minSpeed + Math.random() * (maxSpeed - minSpeed);
+    const carData = {
+      element: npcCar,
+      lane: safePosition.lane,
+      y: safePosition.y,
+      speed: npcCarSpeed,
+      width: 80,
+      height: 160,
+    };
+
+    npcCar.style.left = lanes[carData.lane] + "px";
+    npcCar.style.top = carData.y + "px";
+
+    npcCars.push(carData);
+    return carData;
+  }
+
+  function findSafeSpawnPosition(lanes) {
+    const minVerticalGap = 200;
+    const spawnAttempts = 10;
+
+    for (let attempt = 0; attempt < spawnAttempts; attempt++) {
       const laneIndex = Math.floor(Math.random() * lanes.length);
+      let initialY = -200;
 
-      const carData = {
-        element: npcCar,
-        lane: laneIndex,
-        y: initialY,
-        speed: carSpeed,
-      };
-
-      npcCar.style.position = "absolute";
-      npcCar.style.left = lanes[laneIndex] + "px";
-      npcCar.style.top = carData.y + "px";
-      npcCar.style.width = "80px";
-      npcCar.style.zIndex = "5";
-
-      npcCars.push(carData);
-      return carData;
-    }
-
-    function updateTraffic() {
-      const lanes = getLanePositions();
-      const playerCar = document.getElementById("car");
-      const playerRect = playerCar.getBoundingClientRect();
-      const containerRect = gameContainer.getBoundingClientRect();
-
-      npcCars.forEach((car) => {
-        car.y += car.speed;
-        car.element.style.top = car.y + "px";
-        car.element.style.left = lanes[car.lane] + "px";
-
-        if (car.y > containerRect.height + 100) {
-          car.y = -200 - Math.random() * 500;
-          car.lane = Math.floor(Math.random() * lanes.length);
-          car.element.style.top = car.y + "px";
-          car.element.style.left = lanes[car.lane] + "px";
+      const isSafe = npcCars.every((existingCar) => {
+        if (existingCar.lane === laneIndex) {
+          const verticalDistance = Math.abs(existingCar.y - initialY);
+          return verticalDistance >= minVerticalGap;
         }
-        const npcCarRect = car.element.getBoundingClientRect();
-        if (isColliding(playerRect, npcCarRect)) {
-          handleCollision(car);
-        }
+        return true;
       });
 
-      requestAnimationFrame(updateTraffic);
+      if (isSafe) {
+        return { lane: laneIndex, y: initialY };
+      }
+
+      initialY -= Math.random() * 300;
     }
 
-    function isColliding(rect1, rect2) {
-      return !(
-        rect1.top > rect2.bottom ||
-        rect1.right < rect2.left ||
-        rect1.bottom < rect2.top ||
-        rect1.left > rect2.right
-      );
+    return null;
+  }
+
+  function resetSpawnInterval() {
+    clearInterval(spawnInterval);
+    spawnInterval = setInterval(() => {
+      if (npcCars.length < maxNPCCount) {
+        const newCar = createNPCCar();
+        if (!newCar) {
+          clearInterval(spawnInterval);
+          setTimeout(() => resetSpawnInterval(), 500);
+        }
+      }
+    }, spawnDelay);
+  }
+
+  function updateTraffic() {
+    const gameContainer = document.querySelector(".game-page");
+    const lanes = getLanePositions();
+    const playerRect = car.getBoundingClientRect();
+    const containerRect = gameContainer.getBoundingClientRect();
+
+    for (let i = npcCars.length - 1; i >= 0; i--) {
+      const carData = npcCars[i];
+
+      carData.y += carData.speed;
+      carData.element.style.top = carData.y + "px";
+
+      if (carData.y > containerRect.height + 100) {
+        carData.element.remove();
+        npcCars.splice(i, 1);
+        continue;
+      }
+
+      const npcCarRect = carData.element.getBoundingClientRect();
+      if (isColliding(playerRect, npcCarRect)) {
+        handleCollision(carData, i);
+      }
     }
 
-    function handleCollision(car) {
-      console.log("Collision detected with NPC car!", car);
-      // Handle collision: you might want to end the game or subtract points here.
-    }
+    requestAnimationFrame(updateTraffic);
+  }
 
-    updateTraffic();
+  function isColliding(rect1, rect2) {
+    return !(
+      rect1.top > rect2.bottom ||
+      rect1.right < rect2.left ||
+      rect1.bottom < rect2.top ||
+      rect1.left > rect2.right
+    );
+  }
+
+  function handleCollision(carData, index) {
+    collisions++;
+    updateScoreBoard();
+    if (collisions >= 10) {
+      gameOver();
+      return;
+    }
+    carData.element.remove();
+    npcCars.splice(index, 1);
   }
 
   window.addEventListener("resize", () => {
@@ -228,4 +289,95 @@ window.addEventListener("load", () => {
     carX = closestLane - carRect.width / 2;
     car.style.transform = `translate(${carX}px, ${carY}px)`;
   });
+
+  const keys = {};
+  document.addEventListener("keydown", (event) => {
+    keys[event.key] = true;
+  });
+  document.addEventListener("keyup", (event) => {
+    keys[event.key] = false;
+  });
+
+  function update() {
+    if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
+      velocityX -= acceleration;
+    }
+    if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
+      velocityX += acceleration;
+    }
+    velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
+    velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
+    if (
+      !(
+        keys["ArrowLeft"] ||
+        keys["a"] ||
+        keys["A"] ||
+        keys["ArrowRight"] ||
+        keys["d"] ||
+        keys["D"]
+      )
+    ) {
+      velocityX *= friction;
+    }
+    carX += velocityX;
+    const containerRect = document
+      .querySelector(".game-page")
+      .getBoundingClientRect();
+    const carRect = car.getBoundingClientRect();
+    const roadRect = document.getElementById("road").getBoundingClientRect();
+    const roadLeft = (containerRect.width - roadRect.width) / 2;
+    const leftBoundary = roadLeft + roadLeft * 0.1;
+    const rightBoundary = roadLeft + roadRect.width - roadLeft * 0.1;
+    if (carRect.left < leftBoundary) {
+      carX += leftBoundary - carRect.left;
+      velocityX = 0;
+    }
+    if (carRect.right > rightBoundary) {
+      carX += rightBoundary - carRect.right;
+      velocityX = 0;
+    }
+    if (carRect.top < containerRect.top) {
+      carY += containerRect.top - carRect.top;
+      velocityY = 0;
+    }
+    if (carRect.bottom > containerRect.bottom) {
+      carY += containerRect.bottom - carRect.bottom;
+      velocityY = 0;
+    }
+    car.style.transform = `translate(${carX}px, ${carY}px)`;
+    requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+
+  go.addEventListener("click", () => {
+    if (username.value === "" || age.value === "" || color.value === "") {
+      let errorMsg = document.getElementById("error-message");
+      if (!errorMsg) {
+        errorMsg = document.createElement("div");
+        errorMsg.id = "error-message";
+        errorMsg.style.color = "red";
+        errorMsg.style.marginTop = "10px";
+        document.querySelector(".intro-box").appendChild(errorMsg);
+      }
+      errorMsg.innerText =
+        "Please make sure you have entered appropriate inputs";
+      errorMsg.style.color = "red";
+    } else {
+      const errorMsg = document.getElementById("error-message");
+      if (errorMsg) errorMsg.remove();
+      document.getElementById("intro-box").style.display = "none";
+      document.getElementById("instructions-overlay").style.display = "flex";
+    }
+  });
+
+  document.getElementById("instructions-ok").addEventListener("click", () => {
+    document.getElementById("instructions-overlay").style.display = "none";
+    startGame();
+  });
+
+  document.getElementById("restart-btn").addEventListener("click", () => {
+    restartGame();
+  });
+
+  updateTraffic();
 });

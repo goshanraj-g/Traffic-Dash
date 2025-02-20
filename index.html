@@ -1,40 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="js/script.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Traffic Dash</title>
-</head>
-
-<body>
-
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
     <div class="intro-box" id="intro-box">
-        <h1>TRAFFIC DASH</h1>
-        <div class="input-group">
-            <input type="text" name="Name" placeholder="Name" id="name">
-            <input type="number" name="Age" placeholder="Age" id="age" min="0" step="1" required>
-
-            <div class="color-picker">
-                <p>Select Favorite Color:</p>
-                <div class="color-input-wrapper">
-                    <input type="color" name="Favorite Color" id="color" value="#FFFFFF">
-                </div>
-            </div>
+      <h1>TRAFFIC DASH</h1>
+      <div class="input-group">
+        <input type="text" name="Name" placeholder="Name" id="name" />
+        <input
+          type="number"
+          name="Age"
+          placeholder="Age"
+          id="age"
+          min="0"
+          step="1"
+          required
+        />
+        <div class="color-picker">
+          <p>Select Favorite Color:</p>
+          <input
+            type="color"
+            name="Favorite Color"
+            id="color"
+            value="#FFFFFF"
+          />
         </div>
-        <button id="go">🚦 GO! 🚦</button>
+      </div>
+      <button id="go">🚦 GO! 🚦</button>
+      <div id="error-message"></div>
+    </div>
+
+    <div id="instructions-overlay" class="instructions-overlay">
+      <div class="instructions-content">
+        <h2>How to Play</h2>
+        <p>Use the Arrow keys or A/D to move left/right.</p>
+        <p>
+          Avoid colliding with NPC vehicles. Colliding 10 times ends the game.
+        </p>
+        <p>Your score increases over time, and rounds get harder!</p>
+        <p>
+          At 100 points, you'll switch to a bike and NPCs speed up (Medium
+          round).<br />
+          At 200 points, it goes to Hard (even faster NPCs, longer spawn delays,
+          and more cars on screen).
+        </p>
+        <button id="instructions-ok">OK</button>
+      </div>
+    </div>
+
+    <div id="game-over-screen" class="game-over-screen">
+      <div class="game-over-content">
+        <h2>Game Over!</h2>
+        <p id="final-score"></p>
+        <button id="restart-btn">Restart</button>
+      </div>
     </div>
 
     <div class="game-page">
-        <div class="road-container" id="road-container">
-            <img src="images/road.png" class="road" id="road" tabindex="0">
-            <img src="images/car.png" class="car" id="car" tabindex="0">
-        </div>
+      <div class="road-container" id="road-container">
+        <img src="images/road.png" class="road" id="road" tabindex="0" />
+        <img src="images/car.png" class="car" id="car" tabindex="0" />
+      </div>
     </div>
-    </div>
-</body>
 
+    <div id="score-board"></div>
+
+    <script src="js/script.js"></script>
+  </body>
 </html>
