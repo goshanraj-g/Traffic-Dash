@@ -11,7 +11,7 @@ window.addEventListener("load", () => {
   let velocityY = 0;
   const acceleration = 0.2;
   const maxSpeed = 30;
-  const friction = 0.9;
+  const friction = 0.85;
 
   // Game state variables
   let score = 0;
@@ -52,7 +52,7 @@ window.addEventListener("load", () => {
   function updateScoreBoard() {
     const scoreBoard = document.getElementById("score-board");
     if (scoreBoard) {
-      scoreBoard.innerText = `Score: ${score} | Round: ${getRoundName()} | Hits: ${collisions}/10`;
+      scoreBoard.innerText = `Score: ${score} | Round: ${getRoundName()} | Hits: ${collisions}/5`;
     }
   }
 
@@ -265,7 +265,7 @@ window.addEventListener("load", () => {
   function handleCollision(carData, index) {
     collisions++;
     updateScoreBoard();
-    if (collisions >= 10) {
+    if (collisions >= 5) {
       gameOver();
       return;
     }
