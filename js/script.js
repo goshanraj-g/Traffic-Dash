@@ -1,3 +1,7 @@
+// Goshanraj Govindaraj 400569969
+// Feburary 17 2025
+// JavaScript Code for Logic
+
 window.addEventListener("load", () => {
   const go = document.getElementById("go");
   const username = document.getElementById("name");
@@ -26,6 +30,11 @@ window.addEventListener("load", () => {
 
   document.querySelector(".game-page").style.display = "none";
 
+
+  /**
+   * Gets the position of each of the 3 lanes
+   * @returns the specific position of each of the three lanes in the image
+   */
   function getLanePositions() {
     const roadContainer = document.getElementById("road-container");
     const containerRect = roadContainer.getBoundingClientRect();
@@ -39,6 +48,10 @@ window.addEventListener("load", () => {
     return [lane1, lane2, lane3];
   }
 
+  /**
+   * Calculates the starting position of the car, in order for the car to be spawned inside of a lane
+   * @returns positions where the car can spawn, ensuring that it's on the road
+   */
   function initializeCarPosition() {
     const container = document.querySelector(".game-page");
     const containerRect = container.getBoundingClientRect();
@@ -49,6 +62,11 @@ window.addEventListener("load", () => {
     car.style.transform = `translate(${carX}px, ${carY}px)`;
   }
 
+  /**
+   * Updates the scoreboard, from events such as score change, round number, and collision updates
+   * @returns {string} Updated scoreboard
+   */
+
   function updateScoreBoard() {
     const scoreBoard = document.getElementById("score-board");
     if (scoreBoard) {
@@ -56,6 +74,10 @@ window.addEventListener("load", () => {
     }
   }
 
+  /**
+   * Starts the updating the score, adds one score every second
+   * 
+   */
   function startScoreUpdate() {
     scoreInterval = setInterval(() => {
       score++;
@@ -297,12 +319,57 @@ window.addEventListener("load", () => {
   document.addEventListener("keyup", (event) => {
     keys[event.key] = false;
   });
+  document.addEventListener("touchstart", handleTouchStart);
+  document.addEventListener("touchend", handleTouchEnd);
+  document.addEventListener("touchmove", handleTouchMove);
+
+  let touchDirection = null;
+  let touchActive = false;
+
+  function handleTouchStart(event) {
+    if (event.touches.length > 0) {
+      const touchX = event.touches[0].clientX;
+      const screenWidth = window.innerWidth;
+
+      if (touchX < screenWidth / 2) {
+        touchDirection = "left";
+        velocityX = -maxSpeed / 2;
+      } else {
+        touchDirection = "right";
+        velocityX = maxSpeed / 2;
+      }
+      touchActive = true;
+    }
+  }
+
+  function handleTouchMove(event) {
+    if (event.touches.length > 0 && touchActive) {
+      const touchX = event.touches[0].clientX;
+
+      const screenWidth = window.innerWidth;
+
+      if (touchX < screenWidth / 2) {
+        touchDirection = "left";
+        velocityX = -maxSpeed / 2;
+      } else {
+        touchDirection = "right";
+        velocityX = maxSpeed / 2;
+      }
+
+    }
+  }
+
+  function handleTouchEnd(event) {
+    touchActive = false;
+    touchDirection = null;
+    velocityX = 0;
+  }
 
   function update() {
-    if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
+    if (keys["ArrowLeft"] || keys["a"] || keys["A"] || touchDirection === "left") {
       velocityX -= acceleration;
     }
-    if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
+    if (keys["ArrowRight"] || keys["d"] || keys["D"] || touchDirection === "right") {
       velocityX += acceleration;
     }
     velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));

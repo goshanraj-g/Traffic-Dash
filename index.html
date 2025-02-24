@@ -1,74 +1,66 @@
+<!-- Goshanraj Govindaraj 400569969 -->
+<!-- Feburary 17 2025 -->
+<!-- HTML Code for Backbone -->
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Traffic Dash</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body>
-    <div class="intro-box" id="intro-box">
-      <h1>TRAFFIC DASH</h1>
-      <div class="input-group">
-        <input type="text" name="Name" placeholder="Name" id="name" />
-        <input
-          type="number"
-          name="Age"
-          placeholder="Age"
-          id="age"
-          min="0"
-          step="1"
-          required
-        />
-        <div class="color-picker">
-          <p>Select Favorite Color:</p>
-          <input
-            type="color"
-            name="Favorite Color"
-            id="color"
-            value="#FFFFFF"
-          />
-        </div>
-      </div>
-      <button id="go">🚦 GO! 🚦</button>
-      <div id="error-message"></div>
-    </div>
 
-    <div id="instructions-overlay" class="instructions-overlay">
-      <div class="instructions-content">
-        <h2><b>How to Play</b></h2>
-        <p>Utilize the arrow Keys (<- and ->) or (A/D) to move left/right</p>
-        <p> Avoid colliding with the NPC traffic, as colliding 5 times ends your game.</p>
-        <p>Your score increases over time, and rounds will get harder as there will be more traffic, and faster speeds</p>
-        <p>At 100 score, you will switch to a bike and you will also speed up!</p>
-        <p>At 200 score, you will turn insanely fast!</p>
-          Avoid colliding with NPC vehicles. Colliding 5 times ends the game.</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Traffic Dash</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
 
-        <button id="instructions-ok">OK</button>
+<body>
+  <div class="intro-box" id="intro-box">
+    <h1>TRAFFIC DASH</h1>
+    <div class="input-group">
+      <input type="text" name="Name" placeholder="Name" id="name" />
+      <input type="number" name="Age" placeholder="Age" id="age" min="0" step="1" required />
+      <div class="color-picker">
+        <p>Select Favorite Color:</p>
+        <input type="color" name="Favorite Color" id="color" value="#FFFFFF" />
       </div>
     </div>
+    <button id="go">🚦 GO! 🚦</button>
+    <div id="error-message"></div>
+  </div>
 
-    <div id="game-over-screen" class="game-over-screen">
-      <div class="game-over-content">
-        <h2>Game Over!</h2>
-        <p id="final-score"></p>
-        <button id="restart-btn">Restart</button>
-      </div>
+  <div id="instructions-overlay" class="instructions-overlay">
+    <div class="instructions-content">
+      <h2><b>How to Play</b></h2>
+      <p><span>Utilize the arrow Keys (<- and ->) or (A/D) to move left/right</span></p>
+      <p>Tap the left side of the screen to move left, and the right side to move right</p>
+      <p> Avoid colliding with the NPC traffic, as colliding 5 times ends your game</p>
+      <p>Your score increases over time, and rounds will get harder as there will be more traffic, and faster speeds</p>
+      <p>At 100 score, you will switch to a bike and you will also speed up!</p>
+      <p>At 200 score, you will turn insanely fast!</p>
+      <p>Avoid colliding with NPC vehicles as colliding 5 times ends the game!</p>
+
+      <button id="instructions-ok">OK</button>
     </div>
+  </div>
 
-    <div class="game-page">
-      <div class="road-container" id="road-container">
-        <img src="images/road.png" class="road" id="road" tabindex="0" />
-        <img src="images/car.png" class="car" id="car" tabindex="0" />
-      </div>
+  <div id="game-over-screen" class="game-over-screen">
+    <div class="game-over-content">
+      <h2>Game Over!</h2>
+      <p id="final-score"></p>
+      <button id="restart-btn">Restart</button>
     </div>
+  </div>
 
-    <div id="score-board"></div>
+  <div class="game-page">
+    <div class="road-container" id="road-container">
+      <img src="images/road.png" class="road" id="road" tabindex="0" />
+      <img src="images/car.png" class="car" id="car" tabindex="0" />
+    </div>
+  </div>
 
-    <script src="js/script.js"></script>
-  </body>
+  <div id="score-board"></div>
+
+  <script src="js/script.js"></script>
+</body>
+
 </html>
