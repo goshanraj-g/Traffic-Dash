@@ -27,6 +27,9 @@ window.addEventListener("load", () => {
   let scoreInterval;
   const npcCars = [];
 
+  let gameStarted = false;
+
+
   document.querySelector(".game-page").style.display = "none";
 
 
@@ -42,9 +45,9 @@ window.addEventListener("load", () => {
     const roadRect = road.getBoundingClientRect();
     const roadLeft = (containerRect.width - roadRect.width) / 2;
     const shift = roadRect.width * 0.05;
-    const lane1 = roadLeft + roadRect.width * (1 / 6);
+    const lane1 = roadLeft + roadRect.width * (1 / 6) - shift;
     const lane2 = roadLeft + roadRect.width * (1 / 2) - shift;
-    const lane3 = roadLeft + roadRect.width * (5 / 6) - shift * 3;
+    const lane3 = roadLeft + roadRect.width * (5 / 6) - shift * 2;
     return [lane1, lane2, lane3];
   }
 
@@ -563,9 +566,22 @@ window.addEventListener("load", () => {
   });
 
   document.getElementById("instructions-ok").addEventListener("click", () => {
-    document.getElementById("instructions-overlay").style.display = "none";
-    startGame();
+    const instructionsOverlay = document.getElementById("instructions-overlay");
+    if (!gameStarted) {
+      instructionsOverlay.style.display = "none";
+      startGame();
+      gameStarted = true;
+    } else {
+      instructionsOverlay.style.display = "none";
+    }
   });
+
+  const helpButton = document.getElementById("help-button");
+  if (helpButton) {
+    helpButton.addEventListener("click", () => {
+      document.getElementById("instructions-overlay").style.display = "flex";
+    });
+  }
 
   document.getElementById("restart-btn").addEventListener("click", () => {
     restartGame();
