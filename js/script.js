@@ -169,11 +169,11 @@ window.addEventListener("load", () => {
     window.location.reload();
   }
 
-   /**
-  * Initializes and starts the game
-  *
-  * @returns {void}
-  */
+  /**
+ * Initializes and starts the game
+ *
+ * @returns {void}
+ */
   function startGame() {
     document.getElementById("intro-box").style.display = "none";
     document.getElementById("game-over-screen").style.display = "none";
@@ -205,11 +205,11 @@ window.addEventListener("load", () => {
     setTimeout(initializeCarPosition, 10);
   }
 
-   /**
-  * Creates an NPC car and adds it to the game.
-  *
-  * @returns {Object} or {null} The NPC car data object, or null if no safe position is found.
-  */
+  /**
+ * Creates an NPC car and adds it to the game.
+ *
+ * @returns {Object} or {null} The NPC car data object, or null if no safe position is found.
+ */
 
   function createNPCCar() {
     const roadContainer = document.getElementById("road-container");
@@ -284,7 +284,7 @@ window.addEventListener("load", () => {
 
     return null;
   }
-  
+
   /**
    * Resets spawn interval for NPC traffic cars
    * 
@@ -468,7 +468,7 @@ window.addEventListener("load", () => {
   }
 
   /**
-   * Updates the player car's position based on user input
+   * Updates the player car's position based on user input, and also checks for if the car hits the boundary
    *
    * @returns {void}
    */
