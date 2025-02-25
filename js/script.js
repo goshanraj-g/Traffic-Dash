@@ -1,7 +1,8 @@
 // Goshanraj Govindaraj 400569969
 // Feburary 15 2025
 // This file contains the logic for the car game which it allows the user to control a car and avoid 
-// NPC traffic. This file includes features such as a scoreboard, levels, collision detection, and traffic spawns
+// NPC traffic. This file includes features such as a scoreboard, levels, collision detection, a help
+//  button and traffic spawns
 
 window.addEventListener("load", () => {
   const go = document.getElementById("go");
@@ -71,7 +72,6 @@ window.addEventListener("load", () => {
    * 
    * @returns {void}
    */
-
   function updateScoreBoard() {
     const scoreBoard = document.getElementById("score-board");
     if (scoreBoard) {
@@ -113,7 +113,6 @@ window.addEventListener("load", () => {
    * 
    * @returns {void}
    *  */
-
   function checkRoundTransition() {
     if (currentRound === 1 && score >= 50) {
       removeAllNPCCars();
@@ -141,7 +140,6 @@ window.addEventListener("load", () => {
    * 
    * @returns {string} name of the current round
    */
-
   function getRoundName() {
     if (currentRound === 1) return "Easy";
     if (currentRound === 2) return "Medium";
@@ -154,7 +152,6 @@ window.addEventListener("load", () => {
    * 
    * @returns {void}
    */
-
   function gameOver() {
     clearInterval(spawnInterval);
     clearInterval(scoreInterval);
@@ -221,7 +218,6 @@ window.addEventListener("load", () => {
  *
  * @returns {Object} or {null} The NPC car data object, or null if no safe position is found.
  */
-
   function createNPCCar() {
     const roadContainer = document.getElementById("road-container");
     const lanes = getLanePositions();
@@ -268,7 +264,6 @@ window.addEventListener("load", () => {
    * 
    * @returns {null}
    */
-
   function removeAllNPCCars() {
     npcCars.forEach(carData => carData.element.remove());
     npcCars.length = 0;
@@ -280,7 +275,6 @@ window.addEventListener("load", () => {
    * @returns {Object} / {null} (an object which has the lane index and y-coordinate of it. 
    * Can also return null if no safe position is found)
    */
-
   function findSafeSpawnPosition(lanes) {
     const minVerticalGap = 200;
     const spawnAttempts = 10;
@@ -312,7 +306,6 @@ window.addEventListener("load", () => {
    * 
    * @returns {void} 
    */
-
   function resetSpawnInterval() {
     clearInterval(spawnInterval);
     spawnInterval = setInterval(() => {
@@ -366,7 +359,6 @@ window.addEventListener("load", () => {
    * @param {DOMRect} rect2 - Bounding rectangle of the second object
    * @returns {boolean} (true if there is a collision between the objects, false if not)
    */
-
   function isColliding(rect1, rect2) {
     return !(
       rect1.top > rect2.bottom ||
@@ -383,7 +375,6 @@ window.addEventListener("load", () => {
    * @param {*} index - the index of the NPC in the npcCars array
    * @returns {void}
    */
-
   function handleCollision(carData, index) {
     collisions++;
     updateScoreBoard();
@@ -435,7 +426,6 @@ window.addEventListener("load", () => {
    * @param {TouchEvent} event - touch event
    * @returns {void}
    */
-
   function handleTouchStart(event) {
     if (event.touches.length > 0) {
       const touchX = event.touches[0].clientX;
@@ -458,7 +448,6 @@ window.addEventListener("load", () => {
    * @param {TouchEvent} event - the touch event
    * @returns {void}
    */
-
   function handleTouchMove(event) {
     if (event.touches.length > 0 && touchActive) {
       const touchX = event.touches[0].clientX;
@@ -472,7 +461,6 @@ window.addEventListener("load", () => {
         touchDirection = "right";
         velocityX = maxSpeed / 2;
       }
-
     }
   }
 
@@ -482,7 +470,6 @@ window.addEventListener("load", () => {
    * @param {TouchEvent} event - the touch event
    * @returns {void}
    */
-
   function handleTouchEnd(event) {
     touchActive = false;
     touchDirection = null;
@@ -494,7 +481,6 @@ window.addEventListener("load", () => {
    *
    * @returns {void}
    */
-
   function update() {
     if (keys["ArrowLeft"] || keys["a"] || keys["A"] || touchDirection === "left") {
       velocityX -= acceleration;
