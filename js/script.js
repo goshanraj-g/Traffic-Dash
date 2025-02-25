@@ -112,7 +112,8 @@ window.addEventListener("load", () => {
    *  */
 
   function checkRoundTransition() {
-    if (currentRound === 1 && score >= 10) {
+    if (currentRound === 1 && score >= 50) {
+      removeAllNPCCars();
       currentRound = 2;
       npcCarSpeed = 7;
       spawnDelay = 1000;
@@ -121,7 +122,8 @@ window.addEventListener("load", () => {
       car.style.height = "15%";
       resetSpawnInterval();
       updateBackgroundSpeed();
-    } else if (currentRound === 2 && score >= 20) {
+    } else if (currentRound === 2 && score >= 100) {
+      removeAllNPCCars();
       currentRound = 3;
       npcCarSpeed = 9;
       spawnDelay = 800;
@@ -195,7 +197,6 @@ window.addEventListener("load", () => {
     startScoreUpdate();
 
     npcCars.length = 0;
-    const roadContainer = document.getElementById("road-container");
     document.querySelectorAll(".npcCar").forEach((el) => el.remove());
 
     resetSpawnInterval();
@@ -250,6 +251,17 @@ window.addEventListener("load", () => {
 
     npcCars.push(carData);
     return carData;
+  }
+
+  /**
+   * Removes all NPC Cars when the round transitions
+   * 
+   * @returns {null}
+   */
+
+  function removeAllNPCCars() {
+    npcCars.forEach(carData => carData.element.remove());
+    npcCars.length = 0;
   }
 
   /**
