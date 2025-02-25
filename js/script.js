@@ -1,5 +1,5 @@
 // Goshanraj Govindaraj 400569969
-// Feburary 17 2025
+// Feburary 15 2025
 // This file contains the logic for the car game which it allows the user to control a car and avoid 
 // NPC traffic. This file includes features such as a scoreboard, levels, collision detection, and traffic spawns
 
@@ -13,7 +13,7 @@ window.addEventListener("load", () => {
   let carY = 0;
   let velocityX = 0;
   let velocityY = 0;
-  const acceleration = 0.5;
+  const acceleration = 0.4;
   const maxSpeed = 30;
   const friction = 0.9;
 
