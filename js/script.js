@@ -187,9 +187,9 @@ window.addEventListener("load", () => {
     scoreBoard.style.color = color.value;
     helpButton.style.display = "block";
     if (color.value.toLowerCase() === "#ffffff") {
-      helpButton.style.background = "black";
+      helpButton.style.color = "black";
     }
-    helpButton.style.color = color.value;
+    helpButton.style.background = color.value;
 
     updateScoreBoard();
 

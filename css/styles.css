@@ -251,6 +251,7 @@ body {
   padding: 10px;
   cursor: pointer;
   display: none;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
 }
 
 .help-button:hover {
