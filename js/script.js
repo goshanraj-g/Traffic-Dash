@@ -1,11 +1,11 @@
 // Goshanraj Govindaraj 400569969
 // Feburary 17 2025
-// JavaScript Code for Logic
+// This file contains the logic for the car game which it allows the user to control a car and avoid 
+// NPC traffic. This file includes features such as a scoreboard, levels, collision detection, and traffic spawns
 
 window.addEventListener("load", () => {
   const go = document.getElementById("go");
-  const username = document.getElementById("name");
-  const age = document.getElementById("age");
+  let username = document.getElementById("name");
   const color = document.getElementById("color");
   const body = document.body;
   const car = document.getElementById("car");
@@ -13,11 +13,10 @@ window.addEventListener("load", () => {
   let carY = 0;
   let velocityX = 0;
   let velocityY = 0;
-  const acceleration = 0.2;
+  const acceleration = 0.5;
   const maxSpeed = 30;
-  const friction = 0.85;
+  const friction = 0.9;
 
-  // Game state variables
   let score = 0;
   let collisions = 0;
   let currentRound = 1;
@@ -33,8 +32,9 @@ window.addEventListener("load", () => {
 
   /**
    * Gets the position of each of the 3 lanes
-   * @returns the specific position of each of the three lanes in the image
-   */
+   * 
+   * @returns {Array[number]} An array containing the specific X-cooridnates of each lane
+   * */
   function getLanePositions() {
     const roadContainer = document.getElementById("road-container");
     const containerRect = roadContainer.getBoundingClientRect();
@@ -50,7 +50,8 @@ window.addEventListener("load", () => {
 
   /**
    * Calculates the starting position of the car, in order for the car to be spawned inside of a lane
-   * @returns positions where the car can spawn, ensuring that it's on the road
+   * 
+   * @returns {void}
    */
   function initializeCarPosition() {
     const container = document.querySelector(".game-page");
@@ -64,7 +65,8 @@ window.addEventListener("load", () => {
 
   /**
    * Updates the scoreboard, from events such as score change, round number, and collision updates
-   * @returns {string} Updated scoreboard
+   * 
+   * @returns {void}
    */
 
   function updateScoreBoard() {
@@ -77,6 +79,7 @@ window.addEventListener("load", () => {
   /**
    * Starts the updating the score, adds one score every second
    * 
+   * @returns {void}
    */
   function startScoreUpdate() {
     scoreInterval = setInterval(() => {
@@ -86,6 +89,11 @@ window.addEventListener("load", () => {
     }, 1000);
   }
 
+  /**
+   * Updates the background animation speed depending on the round to make it seem like everything's faster
+   * 
+   * @returns {void}
+   */
   function updateBackgroundSpeed() {
     const road = document.getElementById("road");
     if (currentRound === 1) {
@@ -97,25 +105,37 @@ window.addEventListener("load", () => {
     }
   }
 
+  /**
+   * Checks if the game should switch onto the next round utilizing score and levels
+   * 
+   * @returns {void}
+   *  */
+
   function checkRoundTransition() {
     if (currentRound === 1 && score >= 10) {
       currentRound = 2;
-      npcCarSpeed = 5;
+      npcCarSpeed = 7;
       spawnDelay = 1000;
       maxNPCCount = 5;
       car.src = "images/bike.png";
       car.style.height = "15%";
       resetSpawnInterval();
       updateBackgroundSpeed();
-    } else if (currentRound === 2 && score >= 40) {
+    } else if (currentRound === 2 && score >= 20) {
       currentRound = 3;
-      npcCarSpeed = 7;
+      npcCarSpeed = 9;
       spawnDelay = 800;
       maxNPCCount = 6;
       resetSpawnInterval();
       updateBackgroundSpeed();
     }
   }
+
+  /**
+   * Returns the name of the current round (includes easy, medium, hard)
+   * 
+   * @returns {string} name of the current round
+   */
 
   function getRoundName() {
     if (currentRound === 1) return "Easy";
@@ -124,19 +144,36 @@ window.addEventListener("load", () => {
     return "";
   }
 
+  /**
+   * Shows the game over screen, and displays username, and the score at which they ended the game on 
+   * 
+   * @returns {void}
+   */
+
   function gameOver() {
     clearInterval(spawnInterval);
     clearInterval(scoreInterval);
     const gameOverScreen = document.getElementById("game-over-screen");
     const finalScoreEl = document.getElementById("final-score");
-    finalScoreEl.innerText = `Final Score: ${score}`;
+    finalScoreEl.innerText = `${username.value}, your final score is: ${score}`;
     gameOverScreen.style.display = "flex";
   }
+
+  /**
+   * Restarts the game by reloading the page (if user clicks restart)
+   * 
+   * @returns {void}
+   */
 
   function restartGame() {
     window.location.reload();
   }
 
+   /**
+  * Initializes and starts the game
+  *
+  * @returns {void}
+  */
   function startGame() {
     document.getElementById("intro-box").style.display = "none";
     document.getElementById("game-over-screen").style.display = "none";
@@ -167,6 +204,12 @@ window.addEventListener("load", () => {
     car.focus();
     setTimeout(initializeCarPosition, 10);
   }
+
+   /**
+  * Creates an NPC car and adds it to the game.
+  *
+  * @returns {Object} or {null} The NPC car data object, or null if no safe position is found.
+  */
 
   function createNPCCar() {
     const roadContainer = document.getElementById("road-container");
@@ -209,6 +252,13 @@ window.addEventListener("load", () => {
     return carData;
   }
 
+  /**
+   * Finds a safe position to spawn a car (avoid cars spawning inside of each other)
+   * @param {Array[number]} lanes (the x-coordinates of each lane) 
+   * @returns {Object} / {null} (an object which has the lane index and y-coordinate of it. 
+   * Can also return null if no safe position is found)
+   */
+
   function findSafeSpawnPosition(lanes) {
     const minVerticalGap = 200;
     const spawnAttempts = 10;
@@ -234,6 +284,12 @@ window.addEventListener("load", () => {
 
     return null;
   }
+  
+  /**
+   * Resets spawn interval for NPC traffic cars
+   * 
+   * @returns {void} 
+   */
 
   function resetSpawnInterval() {
     clearInterval(spawnInterval);
@@ -248,6 +304,12 @@ window.addEventListener("load", () => {
     }, spawnDelay);
   }
 
+
+  /**
+   * Updates the position of all NPC cars, (whether they collide, spawn in, or despawn off the road)
+   * 
+   * @returns {void}
+   */
   function updateTraffic() {
     const gameContainer = document.querySelector(".game-page");
     const lanes = getLanePositions();
@@ -275,6 +337,14 @@ window.addEventListener("load", () => {
     requestAnimationFrame(updateTraffic);
   }
 
+  /**
+   * Determines if there is a collision between two objects (car and traffic)
+   * 
+   * @param {DOMRect} rect1 - Bounding rectangle of the first object
+   * @param {DOMRect} rect2 - Bounding rectangle of the second object
+   * @returns {boolean} (true if there is a collision between the objects, false if not)
+   */
+
   function isColliding(rect1, rect2) {
     return !(
       rect1.top > rect2.bottom ||
@@ -283,6 +353,14 @@ window.addEventListener("load", () => {
       rect1.left > rect2.right
     );
   }
+
+  /**
+   * handles the collisions when it is detected (between an NPC and the user)
+   * 
+   * @param {Object} carData  - NPC Car data
+   * @param {*} index - the index of the NPC in the npcCars array
+   * @returns {void}
+   */
 
   function handleCollision(carData, index) {
     collisions++;
@@ -294,6 +372,9 @@ window.addEventListener("load", () => {
     carData.element.remove();
     npcCars.splice(index, 1);
   }
+
+  //This ensures that the lanes and bounding of the road is modified depending on the window size, ensuring that the
+  // car is not able to go off the screen
 
   window.addEventListener("resize", () => {
     const carRect = car.getBoundingClientRect();
@@ -326,6 +407,13 @@ window.addEventListener("load", () => {
   let touchDirection = null;
   let touchActive = false;
 
+  /**
+   * handles the touch start event for mobile play
+   *
+   * @param {TouchEvent} event - touch event
+   * @returns {void}
+   */
+
   function handleTouchStart(event) {
     if (event.touches.length > 0) {
       const touchX = event.touches[0].clientX;
@@ -341,6 +429,13 @@ window.addEventListener("load", () => {
       touchActive = true;
     }
   }
+
+  /**
+   * handles the touch move event for mobile play
+   *
+   * @param {TouchEvent} event - the touch event
+   * @returns {void}
+   */
 
   function handleTouchMove(event) {
     if (event.touches.length > 0 && touchActive) {
@@ -359,11 +454,24 @@ window.addEventListener("load", () => {
     }
   }
 
+  /**
+   * handles the touch end event for mobile play
+   *
+   * @param {TouchEvent} event - the touch event
+   * @returns {void}
+   */
+
   function handleTouchEnd(event) {
     touchActive = false;
     touchDirection = null;
     velocityX = 0;
   }
+
+  /**
+   * Updates the player car's position based on user input
+   *
+   * @returns {void}
+   */
 
   function update() {
     if (keys["ArrowLeft"] || keys["a"] || keys["A"] || touchDirection === "left") {
@@ -381,11 +489,16 @@ window.addEventListener("load", () => {
         keys["A"] ||
         keys["ArrowRight"] ||
         keys["d"] ||
-        keys["D"]
+        keys["D"] ||
+        touchDirection === "right" ||
+        touchDirection === "left"
       )
     ) {
       velocityX *= friction;
     }
+
+    velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
+
     carX += velocityX;
     const containerRect = document
       .querySelector(".game-page")
@@ -417,7 +530,7 @@ window.addEventListener("load", () => {
   requestAnimationFrame(update);
 
   go.addEventListener("click", () => {
-    if (username.value === "" || age.value === "" || color.value === "") {
+    if (username.value === "" || color.value === "") {
       let errorMsg = document.getElementById("error-message");
       if (!errorMsg) {
         errorMsg = document.createElement("div");
