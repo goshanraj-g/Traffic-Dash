@@ -186,7 +186,14 @@ window.addEventListener("load", () => {
     body.style.backgroundImage = "none";
 
     const scoreBoard = document.getElementById("score-board");
+    const helpButton = document.getElementById("help-button")
     scoreBoard.style.color = color.value;
+    helpButton.style.display = "block";
+    if (color.value.toLowerCase() === "#ffffff") {
+      helpButton.style.background = "black";
+    }
+    helpButton.style.color = color.value;
+
     updateScoreBoard();
 
     score = 0;
